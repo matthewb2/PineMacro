@@ -1,0 +1,13 @@
+C:\Users\user\Documents\Projects\ListBoxEx\ListBoxEx\bin\Debug\PineMacro.exe.config
+C:\Users\user\Documents\Projects\ListBoxEx\ListBoxEx\bin\Debug\PineMacro.exe
+C:\Users\user\Documents\Projects\ListBoxEx\ListBoxEx\bin\Debug\PineMacro.pdb
+C:\Users\user\Documents\Projects\ListBoxEx\ListBoxEx\bin\Debug\Gma.System.MouseKeyHook.dll
+C:\Users\user\Documents\Projects\ListBoxEx\ListBoxEx\obj\Debug\ListBoxEx.Delay.resources
+C:\Users\user\Documents\Projects\ListBoxEx\ListBoxEx\obj\Debug\ListBoxEx.Form1.resources
+C:\Users\user\Documents\Projects\ListBoxEx\ListBoxEx\obj\Debug\ListBoxEx.MouseEdit.resources
+C:\Users\user\Documents\Projects\ListBoxEx\ListBoxEx\obj\Debug\PineMacro.Properties.Resources.resources
+C:\Users\user\Documents\Projects\ListBoxEx\ListBoxEx\obj\Debug\PineMacro.csproj.GenerateResource.cache
+C:\Users\user\Documents\Projects\ListBoxEx\ListBoxEx\obj\Debug\PineMacro.csproj.CoreCompileInputs.cache
+C:\Users\user\Documents\Projects\ListBoxEx\ListBoxEx\obj\Debug\PineMacro.csproj.CopyComplete
+C:\Users\user\Documents\Projects\ListBoxEx\ListBoxEx\obj\Debug\PineMacro.exe
+C:\Users\user\Documents\Projects\ListBoxEx\ListBoxEx\obj\Debug\PineMacro.pdb
