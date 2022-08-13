@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Threading;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace ListBoxEx
 {
@@ -231,6 +226,15 @@ namespace ListBoxEx
         private void Form1_Load_1(object sender, EventArgs e)
         {
 
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+
+            _items.RemoveAt(listBox1.SelectedIndex);
+
+            listBox1.DataSource = null;
+            listBox1.DataSource = _items;
         }
 
         private void button5_Click(object sender, EventArgs e)

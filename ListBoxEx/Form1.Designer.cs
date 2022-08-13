@@ -30,7 +30,6 @@ namespace ListBoxEx
         /// </summary>
         private void InitializeComponent()
         {
-            this.Icon = new Icon("4080418521598894792-512.ico");
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -157,6 +156,7 @@ namespace ListBoxEx
             this.button7.TabIndex = 11;
             this.button7.Text = "삭제";
             this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // Form1
             // 
