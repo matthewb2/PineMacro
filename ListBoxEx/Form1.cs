@@ -4,6 +4,9 @@ using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Input;
+using Gma.System.MouseKeyHook;
+
 
 namespace ListBoxEx
 {
@@ -12,8 +15,10 @@ namespace ListBoxEx
 
         public List<string> _items = new List<string>(); // <-- Add this
 
-        bool isRunning = false;
+        static bool isRunning = false;
 
+        private IKeyboardMouseEvents globalHook;
+        
         public string runKey="F2", stopKey="F3";
 
         Thread t1;
@@ -27,6 +32,39 @@ namespace ListBoxEx
         private const int MOUSEEVENTF_LEFTDOWN = 0x02;
         private const int MOUSEEVENTF_LEFTUP = 0x04;
 
+
+        private void GlobalHook_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.F3)
+            {
+                //MessageBox.Show(string.Format("{0} Key Pressed", e.KeyData.ToString()));
+                isRunning = false;
+                if (t1 != null)
+                {
+                    if (t1.IsAlive)
+                    {
+                        t1.Abort();
+                        button5.Enabled = false;
+                        isRunning = false;
+                    }
+                }
+            }
+            //
+            /*
+            isRunning = false;
+            //ExcuteMacro();
+            if (t1 != null)
+            {
+                if (t1.IsAlive)
+                {
+                    t1.Abort();
+                    button5.Enabled = false;
+                    isRunning = false;
+                }
+            }
+            */
+        }
+
         public Form1()
         {
             InitializeComponent();
@@ -34,6 +72,12 @@ namespace ListBoxEx
 
             listBox1.DoubleClick += new System.EventHandler(listBox1_DoubleClick);
 
+            //
+            globalHook = Hook.GlobalEvents();
+
+            globalHook.KeyDown += GlobalHook_KeyDown;
+        
+            //
             button5.Enabled = false;
 
             _items.Add("(시작)"); // <-- Add these
@@ -42,7 +86,7 @@ namespace ListBoxEx
 
             //
             //_items.Add("지연 3초");
-            _items.Add("마우스 위치(2538,14) 왼버튼 클릭");
+            //_items.Add("마우스 위치(2538,14) 왼버튼 클릭");
             listBox1.DataSource = null;
             
             listBox1.DataSource = _items;
@@ -57,19 +101,7 @@ namespace ListBoxEx
 
         void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            //MessageBox.Show(runKey);
-            if (e.KeyCode.ToString() == runKey)
-            {
-                MessageBox.Show("F2 pressed");
-                ExcuteMacro();
-            }
-
-            if (e.KeyCode.ToString() == stopKey)
-            {
-                //MessageBox.Show("F2 pressed");
-                //ExcuteMacro();
-                t1.Abort();
-            }
+        
 
         }
 
@@ -132,43 +164,57 @@ namespace ListBoxEx
                 }
 
             }
-            
+
             //
             /*
             t1 = new Thread(new ThreadStart(RunMacro));
             // start newly created thread
             t1.Start();
             */
+            
 
         }
         void RunMacro()
         {
-            foreach (var listBoxItem in listBox1.Items)
+            //           
+            int cm = Int16.Parse(textBox1.Text);
+            //MessageBox.Show(cm.ToString());
+            if (cm == 0)
             {
-                // use the currently iterated list box item
-                //MessageBox.Show(string.Format("{0}", listBoxItem.ToString()));
-                int cm = Int16.Parse(textBox1.Text);
-
-                if (cm == 0)
+                isRunning = true;
+                while (true)
                 {
-                    //MessageBox.Show("okay 0");
+                    if (isRunning == false) break;
+                    ExcuteMacro();
+                    Thread.Sleep(1000);
                 }
-                else
+                
+            }
+            else
                 {
-                    for (int i = 0; i <= cm; i++)
+                isRunning = true;
+                    for (int i = cm; i > 0; i--)
                     {
+
+                        //MessageBox.Show(string.Format(isRunning.ToString()));
+                        if (isRunning == false) {
+                           // MessageBox.Show(string.Format(isRunning.ToString()));
+                            break; }
                         //Thread.Sleep(5000);
-                       // MessageBox.Show(string.Format("{0}", listBoxItem.ToString()));
+                        else { ExcuteMacro(); }
                     }
                 }
-            }
+            
+            button5.Enabled = false;
         }
 
     private void button3_Click(object sender, EventArgs e)
         {
-            ExcuteMacro();
+            //ExcuteMacro();
+
             isRunning = true;
             button5.Enabled = true;
+            RunMacro();
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -239,10 +285,13 @@ namespace ListBoxEx
 
         private void button5_Click(object sender, EventArgs e)
         {
-            if (t1.IsAlive)
+            if (t1 !=null)
             {
-                t1.Abort();
-                button5.Enabled = false;
+                if (t1.IsAlive)
+                {
+                    t1.Abort();
+                    button5.Enabled = false;
+                }
             }
             
         }
