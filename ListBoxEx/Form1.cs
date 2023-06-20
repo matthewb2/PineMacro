@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text.RegularExpressions;
@@ -21,7 +21,7 @@ namespace ListBoxEx
         
         public string runKey="F2", stopKey="F3";
 
-        Thread t1;
+        static Thread t1;
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         static extern bool SetCursorPos(int x, int y);
@@ -35,9 +35,8 @@ namespace ListBoxEx
 
         private void GlobalHook_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyData == Keys.F3)
+            if (e.KeyData == Keys.F11)
             {
-                //MessageBox.Show(string.Format("{0} Key Pressed", e.KeyData.ToString()));
                 isRunning = false;
                 if (t1 != null)
                 {
@@ -49,27 +48,19 @@ namespace ListBoxEx
                     }
                 }
             }
-            //
-            /*
-            isRunning = false;
-            //ExcuteMacro();
-            if (t1 != null)
-            {
-                if (t1.IsAlive)
-                {
-                    t1.Abort();
-                    button5.Enabled = false;
-                    isRunning = false;
-                }
-            }
-            */
+        }
+
+        public void DoWork()
+        {
+            RunMacro();
         }
 
         public Form1()
         {
             InitializeComponent();
             this.Load += Form1_Load;
-
+            t1 = new Thread(DoWork);
+            //thread1.Start();
             listBox1.DoubleClick += new System.EventHandler(listBox1_DoubleClick);
 
             //
@@ -81,12 +72,6 @@ namespace ListBoxEx
             button5.Enabled = false;
 
             _items.Add("(시작)"); // <-- Add these
-                                //_items.Add("Two");
-                                //_items.Add("Three");
-
-            //
-            //_items.Add("지연 3초");
-            //_items.Add("마우스 위치(2538,14) 왼버튼 클릭");
             listBox1.DataSource = null;
             
             listBox1.DataSource = _items;
@@ -150,35 +135,21 @@ namespace ListBoxEx
                     SetCursorPos(X, Y);
 
                     mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
-                    //System.Threading.Thread.Sleep(1000);
                     mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
                 }
                 else if (request.Contains("지연"))
                 {
-                    //MessageBox.Show("match");
                     var match = Regex.Match(request, @"\d+");
-                    //Console.WriteLine(match);
                     int delaytime = int.Parse(match.ToString());
                     System.Threading.Thread.Sleep(delaytime*1000);
-                    //MessageBox.Show(match.ToString());
                 }
 
             }
 
-            //
-            /*
-            t1 = new Thread(new ThreadStart(RunMacro));
-            // start newly created thread
-            t1.Start();
-            */
-            
-
         }
         void RunMacro()
         {
-            //           
             int cm = Int16.Parse(textBox1.Text);
-            //MessageBox.Show(cm.ToString());
             if (cm == 0)
             {
                 isRunning = true;
@@ -196,25 +167,24 @@ namespace ListBoxEx
                     for (int i = cm; i > 0; i--)
                     {
 
-                        //MessageBox.Show(string.Format(isRunning.ToString()));
                         if (isRunning == false) {
-                           // MessageBox.Show(string.Format(isRunning.ToString()));
                             break; }
-                        //Thread.Sleep(5000);
                         else { ExcuteMacro(); }
                     }
                 }
             
-            button5.Enabled = false;
+            //button5.Enabled = false;
         }
 
     private void button3_Click(object sender, EventArgs e)
         {
-            //ExcuteMacro();
-
+            
             isRunning = true;
+            button3.Enabled = false;
             button5.Enabled = true;
-            RunMacro();
+            //run with tread
+            
+            t1.Start();
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -226,14 +196,12 @@ namespace ListBoxEx
         {
             Delay dd = new Delay(this);
             dd.Show();
-            //_items.Add("마우스 위치(0,0) 왼버튼 클릭")
         }
 
         private void listBox1_DoubleClick(object sender, EventArgs e)
         {
             if (listBox1.SelectedItem != null)
             {
-                //MessageBox.Show(listBox1.SelectedItem.ToString());
                 show_MouseEdit();
             }
 
@@ -244,7 +212,6 @@ namespace ListBoxEx
         {
             if (listBox1.SelectedItem != null)
             {
-                //MessageBox.Show(listBox1.SelectedItem.ToString());
                 string request = listBox1.SelectedItem.ToString();
                 if (Regex.IsMatch(request, "([0-9]*,[0-9]*)"))
                 {
@@ -285,15 +252,11 @@ namespace ListBoxEx
 
         private void button5_Click(object sender, EventArgs e)
         {
-            if (t1 !=null)
-            {
-                if (t1.IsAlive)
-                {
-                    t1.Abort();
-                    button5.Enabled = false;
-                }
-            }
             
+            t1.Abort();
+            button5.Enabled = false;
+            button3.Enabled = true;
+
         }
       
     }
